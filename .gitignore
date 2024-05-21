@@ -11,7 +11,6 @@ node_modules
 
 # production
 /build
-/dist
 /backend/build
 /backend/dist
 # /backend/pkg
@@ -31,3 +30,9 @@ yarn-error.log*
 .vercel
 test-results/
 playwright-report/
+
+# dist
+/dist/*.js
+/dist/*.js.map
+/dist/*.d.ts
+/dist/*.d.ts.map
