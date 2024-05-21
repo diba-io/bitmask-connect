@@ -1,6 +1,6 @@
 {
   "name": "bitmask-connect",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Jose Robles",
@@ -18,8 +18,10 @@
   },
   "scripts": {
     "compile": "tsc",
-    "publish": "yarn compile && npm publish",
-    "lint": "eslint 'src/**/*.{ts,tsx}'",
-    "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,md}'"
+    "publish": "yarn compile && cd dist && npm publish && cd ..",
+    "lint": "yarn prettier --check . && yarn eslint src",
+    "fix": "yarn prettier --write . && yarn eslint src --fix",
+    "verify": "tsc --noEmit",
+    "clean": "rm -rf dist/"
   }
 }

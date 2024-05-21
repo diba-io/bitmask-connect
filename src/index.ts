@@ -10,60 +10,50 @@ export enum AuthInfoError {
 }
 
 export interface AuthInfo {
-  wallet_id: string;
+  walletId: string;
   username: string;
 }
 
-// Function to connect and get the Vault
 export function connectBitmask(
   title: string,
   description: string,
   pubkeyHash: string,
   id: string,
   isDefault: boolean,
-): AuthInfo | AuthInfoError {
-  const call = "get_vault";
-  const dateId = Date.now();
+): Promise<AuthInfo | AuthInfoError | undefined> {
+  return new Promise((resolve, reject) => {
+    const call = "get_vault";
+    const dateId = Date.now();
 
-  window.addEventListener(
-    "message",
-    // eslint-disable-next-line no-shadow
-    async (event) => {
-      if (event.source !== window) {
-        return;
-      }
-      if (event.data.refresh) {
-        return { error: AuthInfoError.NeedReload };
-      } else if (
-        event.data.returnid &&
-        String(event.data.returnid) === String(dateId)
-      ) {
+    // Define the listener function
+    const listener = (event: MessageEvent) => {
+      // Check if the message ID matches
+      if (event.data && event.data.returnid === String(dateId)) {
+        window.removeEventListener("message", listener);
         const response = event.data;
         if (!response) {
-          return AuthInfoError.ExtensionNotDetected;
+          resolve(AuthInfoError.ExtensionNotDetected);
         }
         switch (response?.wallet_id) {
           case "0":
-            return AuthInfoError.OperationCanceled;
+            resolve(AuthInfoError.OperationCanceled);
           case "-1":
-            return AuthInfoError.GenericError;
+            resolve(AuthInfoError.GenericError);
           case "-3":
-            return AuthInfoError.GenericError;
+            resolve(AuthInfoError.GenericError);
           default:
-            return {
-              wallet_id: response?.wallet_id,
+            resolve({
+              walletId: response?.wallet_id,
               username: response?.username,
-            };
+            });
         }
-      } else if (event.data.pubkeyHash === "0" && !event.data.call) {
-        return { error: AuthInfoError.BitmaskConnectionError };
       }
-    },
-    false,
-  );
-  if (pubkeyHash === "0") {
-    return AuthInfoError.ExtensionNotDetected;
-  } else {
+    };
+
+    // Add the event listener
+    window.addEventListener("message", listener);
+
+    // Send the message to the content script
     window.postMessage(
       {
         call,
@@ -77,6 +67,11 @@ export function connectBitmask(
       },
       "*",
     );
-  }
-  return AuthInfoError.GenericError; // Placeholder return value
+
+    // Set a timeout to reject the promise if no response is received
+    setTimeout(() => {
+      window.removeEventListener("message", listener);
+      reject(new Error("No response received within the timeout period"));
+    }, 10000); // 10 seconds timeout
+  });
 }

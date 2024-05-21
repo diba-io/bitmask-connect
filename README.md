@@ -16,7 +16,7 @@ yarn install
 yarn compile
 ```
 
-This will generate the compiled library file, usually named `index.js`, in your project directory.
+This will generate the compiled library file, named `index.js`, in your project directory.
 
 5. Finally, you can add the compiled library file to your project by importing it in your code:
 
