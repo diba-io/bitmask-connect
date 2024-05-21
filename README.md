@@ -27,3 +27,15 @@ import library from "./index.js";
 Make sure to adjust the file path if necessary.
 
 That's it! You have successfully compiled and added the JS library to your project using Yarn.
+
+
+For using the package you have:
+
+try {
+        const response = await sendMessage("title","desdc",0,1122,true);
+        console.log("Response from content script:", response);
+    } catch (error) {
+        console.error("Error communicating with content script:", error);
+}
+
+after add the index.js file to your web or do npm -i bitmask-connect
