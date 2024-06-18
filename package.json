@@ -1,12 +1,12 @@
 {
   "name": "bitmask-connect",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Jose Robles",
   "license": "MIT",
   "dependencies": {
-    "bitmask-core": "^0.7.0-rc.20",
+    "bitmask-core": "^0.7.0-rc.24",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
