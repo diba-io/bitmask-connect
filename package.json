@@ -6,7 +6,7 @@
   "author": "Jose Robles",
   "license": "MIT",
   "dependencies": {
-    "bitmask-core": "^0.7.0-rc.38",
+    "bitmask-core": "^0.7.5-beta.2",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
